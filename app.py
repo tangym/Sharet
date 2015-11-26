@@ -33,4 +33,4 @@ def legacy_images(route):
     return flask.redirect(flask.url_for('http://some.url?maybe'), code=301)
 
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=9000)
+    app.run(port=9000)
