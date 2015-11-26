@@ -128,3 +128,14 @@ def upload(fname=None):
 
 upload()
 
+
+def download(route):
+    file = db.get(File.route==route)
+    # print(route, file)
+    if file:
+        db.update({'download_time': time.strftime('%Y-%m-%d %H:%M:%S', 
+                                                  time.localtime(time.time()))}, 
+                  File.route==route)
+        return file['name']
+    else:
+        return None
