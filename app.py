@@ -61,9 +61,11 @@ def download(route):
     share = os.path.abspath(Sharet.config['share_dir'])
     fname = Sharet.download(route)
     if fname:
-        return current_app.send_static_file(fname)
+        # return current_app.send_static_file(fname)
         # return send_from_directory(directory=share, filename=fname)    # not work
-        # return send_file(os.path.join(share, fname), as_attachment=True)   # not work
+        return send_file(os.path.join(share, fname), 
+                         as_attachment=False, 
+                         attachment_filename=fname[Sharet.config['prefix_length']:])   # now it works ignoring parameters
     else:
         # TODO: 404
         return 'File not found'
