@@ -5,7 +5,7 @@ RUN apt-get update
 RUN apt-get install -y python3 python3-pip libjpeg-dev zlib1g-dev
 
 WORKDIR /root/
-ADD . .
+ADD . /root/
 RUN pip3 install -r requirements.txt
 RUN mv nginx.conf /etc/nginx/
 
