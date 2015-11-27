@@ -127,9 +127,13 @@ function readfiles(files) {
           
           var link = document.createElement("a");
           link.appendChild(document.createTextNode(xhr.responseText));
+          link.style.fontSize = "30px";
+          link.style.fontFamily = " Futura, 'Trebuchet MS', Arial, sans-serif";
           link.href = "/" + xhr.responseText;
-          // link.style.textAlign = "center";
-          holder.appendChild(link);
+          var link_div = document.createElement("div");
+          link_div.style.textAlign = "center";
+          link_div.appendChild(link)
+          holder.appendChild(link_div);
         }
       };
       
