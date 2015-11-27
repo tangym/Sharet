@@ -4,4 +4,3 @@ tinydb
 # and run `apt-get install libjpeg-dev` if you get a jpeg decoder problem
 Pillow
 qrcode
-cStringIO
