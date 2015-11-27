@@ -4,6 +4,7 @@ MAINTAINER tym
 RUN apt-get update
 RUN apt-get install -y python3 python3-pip libjpeg-dev zlib1g-dev
 
+VOLUME /root/
 WORKDIR /root/
 ADD . .
 RUN pip3 install -r requirements.txt
