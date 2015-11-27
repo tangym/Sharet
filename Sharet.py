@@ -14,6 +14,13 @@ from tinydb import TinyDB, Query
 
 with open('Sharet.conf') as f:
     config = json.load(f)
+    
+if 'external_config' in config:
+    if os.path.isfile(config['external_config']):
+        with open(config['external_config']) as f:
+            external_config = json.load(f)
+            for key in external_config:
+                config[key] = external_config[key]
 
 if not os.path.exists(config['upload_dir']):
     os.mkdir(config['upload_dir'])
@@ -101,6 +108,11 @@ def upload(fname=None):
             file = {}
             fmd5 = md5(os.path.join(config['upload_dir'], fname))
             file['md5'] = byte_to_hex(fmd5)
+            
+            if db.contains(File.md5==file['md5']):
+                os.remove(os.path.join(config['upload_dir'], fname))
+                return db.get(File.md5==file['md5'])['route']
+            
             file['name'] = '%s-%s' % (file['md5'][:config['prefix_length']], fname)
             file['route'] = route(fmd5)
             file['upload_time'] = time.strftime('%Y-%m-%d %H:%M:%S', 
@@ -114,6 +126,7 @@ def upload(fname=None):
                 db.insert(file)
                 os.rename(os.path.join(config['upload_dir'], fname),
                           os.path.join(config['share_dir'], file['name']))
+                return file['route']
             else:
                 print('Error: route conflict')
                 sys.exit(1)
@@ -121,10 +134,12 @@ def upload(fname=None):
             print('Error: upload file does not exist')
             sys.exit(1)
     else:
+        routes = []
         flist = os.listdir(config['upload_dir'])
         for fname in flist:
             print(fname, flist)
-            upload(fname)
+            routes += [upload(fname)]
+        return routes
 
 upload()
 
