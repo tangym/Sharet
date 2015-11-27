@@ -137,8 +137,9 @@ def upload(fname=None):
         routes = []
         flist = os.listdir(config['upload_dir'])
         for fname in flist:
-            print(fname, flist)
-            routes += [upload(fname)]
+            froute = upload(fname)
+            print(fname, froute)
+            routes += [froute]
         return routes
 
 upload()
