@@ -7,6 +7,7 @@ import random
 import json
 import os
 import sys
+import getopt
 import time
 
 from tinydb import TinyDB, Query
@@ -22,6 +23,21 @@ if 'external_config' in config:
             for key in external_config:
                 config[key] = external_config[key]
 
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "s:", ["share=",])
+except getopt.GetoptError as err:
+    print(err)
+    print('Error: no such option')
+    sys.exit(1)
+    
+for o, a in opts:
+        if o in ('-s', '--output'):
+            config['share_dir'] = a
+        else:
+            assert False, "unhandled option"
+
+config['upload_dir'] = os.path.join(config['share_dir'], 'temp')
+
 if not os.path.exists(config['upload_dir']):
     os.mkdir(config['upload_dir'])
 elif not os.path.isdir(config['upload_dir']):
@@ -32,6 +48,8 @@ if not os.path.exists(config['share_dir']):
 elif not os.path.isdir(config['share_dir']):
     print('Error: cannot create share directory')
     sys.exit(1)
+
+
 
 db = TinyDB(config['database'], indent=1)
 File = Query()
@@ -84,7 +102,9 @@ def route(byte_code, length=4):
 
 
 # scan share directory.
-flist = os.listdir(config['share_dir'])
+flist = filter(lambda file: os.path.isfile(os.path.join(config['share_dir'], 
+                                                        file)), 
+               os.listdir(config['share_dir']))
 files = {byte_to_hex(md5((os.path.join(config['share_dir'], fname)))): fname 
          for fname in flist if fname != os.path.basename(config['database'])}
 
