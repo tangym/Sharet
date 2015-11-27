@@ -2,7 +2,7 @@ FROM nginx
 MAINTAINER tym
 
 RUN apt-get update
-RUN apt-get install -y python3 python3-pip libjpeg-dev
+RUN apt-get install -y python3 python3-pip libjpeg-dev zlib1g-dev
 
 WORKDIR /root/
 ADD . .
