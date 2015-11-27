@@ -86,7 +86,7 @@ def route(byte_code, length=4):
 # scan share directory.
 flist = os.listdir(config['share_dir'])
 files = {byte_to_hex(md5((os.path.join(config['share_dir'], fname)))): fname 
-         for fname in flist}
+         for fname in flist if fname != os.path.basename(config['database'])}
 
 # remove records of which the file does not exist in share directory
 for file in db.all():
